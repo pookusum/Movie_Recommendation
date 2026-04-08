@@ -50,7 +50,7 @@ import gdown
 import os
 
 if not os.path.exists("similarity.pkl"):
-    gdown.download("https://drive.google.com/file/d/15x0_lGyx3TphPZ9CsL5aZayFYPWdBhyi/view?usp=drive_link", "similarity.pkl", quiet=False)
+    gdown.download("https://drive.google.com/file/d/15x0_lGyx3TphPZ9CsL5aZayFYPWdBhyi", "similarity.pkl", quiet=False)
 
 if not os.path.exists("movie_dict.pkl"):
-    gdown.download("https://drive.google.com/file/d/1la0ohdHqnwTegufNIjZlyGAg-7auWwyO/view?usp=drive_link", "movie_dict.pkl", quiet=False)
+    gdown.download("https://drive.google.com/file/d/1la0ohdHqnwTegufNIjZlyGAg-7auWwyO", "movie_dict.pkl", quiet=False)
