@@ -9,11 +9,9 @@ SIMILARITY_URL = "https://drive.google.com/uc?id=9XyZaBcDeFgHiJk"
 
 if not os.path.exists("movie_dict.pkl"):
     gdown.download(MOVIE_DICT_URL, "movie_dict.pkl", fuzzy=True)
-    
 
 if not os.path.exists("similarity.pkl"):
-    gdown.download(MOVIE_DICT_URL, "similarity.pkl", fuzzy=True)
-
+    gdown.download(SIMILARITY_URL, "similarity.pkl", fuzzy=True)
 # ---------------------------
 # Load data
 # ---------------------------
