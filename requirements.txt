@@ -3,4 +3,4 @@ scikit-learn
 nltk
 pandas
 numpy
-gdown
+requests
