@@ -2,17 +2,22 @@ import pickle
 import pandas as pd
 import streamlit as st
 import os
-import gdown
+import requests
+import os
 
-MOVIE_DICT_URL = "https://drive.google.com/uc?id=1AbCdEfGhIjKlMn"
-SIMILARITY_URL = "https://drive.google.com/uc?id=9XyZaBcDeFgHiJk"
+def download_file(url, filename):
+    if not os.path.exists(filename):
+        with requests.get(url, stream=True) as r:
+            with open(filename, "wb") as f:
+                for chunk in r.iter_content(chunk_size=8192):
+                    f.write(chunk)
 
-if not os.path.exists("movie_dict.pkl"):
-    gdown.download(MOVIE_DICT_URL, "movie_dict.pkl", fuzzy=True)
+MOVIE_DICT_URL = "https://huggingface.co/datasets/PoojaKusum/movie-recommendation-files/resolve/main/movie_dict.pkl"
+SIMILARITY_URL = "https://huggingface.co/datasets/PoojaKusum/movie-recommendation-files/resolve/main/similarity.pkl"
 
-if not os.path.exists("similarity.pkl"):
-    gdown.download(SIMILARITY_URL, "similarity.pkl", fuzzy=True)
-# ---------------------------
+download_file(MOVIE_DICT_URL, "movie_dict.pkl")
+download_file(SIMILARITY_URL, "similarity.pkl")
+
 # Load data
 # ---------------------------
 data = pickle.load(open("movie_dict.pkl", "rb"))
