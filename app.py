@@ -4,17 +4,15 @@ import streamlit as st
 import os
 import gdown
 
-# ---------------------------
-# Download PKL files only if missing
-# ---------------------------
-MOVIE_DICT_URL = "https://drive.google.com/uc?id=YOUR_MOVIE_DICT_FILE_ID"
-SIMILARITY_URL = "https://drive.google.com/uc?id=YOUR_SIMILARITY_FILE_ID"
+MOVIE_DICT_URL = "https://drive.google.com/uc?id=1AbCdEfGhIjKlMn"
+SIMILARITY_URL = "https://drive.google.com/uc?id=9XyZaBcDeFgHiJk"
 
 if not os.path.exists("movie_dict.pkl"):
-    gdown.download(MOVIE_DICT_URL, "movie_dict.pkl", quiet=False)
+    gdown.download(MOVIE_DICT_URL, "movie_dict.pkl", fuzzy=True)
+    
 
 if not os.path.exists("similarity.pkl"):
-    gdown.download(SIMILARITY_URL, "similarity.pkl", quiet=False)
+    gdown.download(MOVIE_DICT_URL, "similarity.pkl", fuzzy=True)
 
 # ---------------------------
 # Load data
