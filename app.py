@@ -5,7 +5,7 @@ import os
 import requests
 
 # ---------------------------
-# DOWNLOAD FILES (UNCHANGED)
+# DOWNLOAD FILES 
 # ---------------------------
 def download_file(url, filename):
     if not os.path.exists(filename):
@@ -28,33 +28,15 @@ data = pd.DataFrame(data)
 
 similarity = pickle.load(open("similarity.pkl", "rb"))
 
-# ---------------------------
-# TMDB API (ADD YOUR KEY)
-# ---------------------------
-API_KEY = "YOUR_API_KEY_HERE"
 
-def fetch_poster(movie_id):
-    url = "http://www.omdbapi.com/?i=tt3896198&apikey=a5784b03?def recommend(movie):
-    recommended_movies = []
-    recommended_posters = []
-
-    movie_index = data[data['title'] == movie].index[0]
-    distance = similarity[movie_index]
-
-    movie_list = sorted(
-        list(enumerate(distance)),
-        reverse=True,
-        key=lambda x: x[1]
-    )[1:6]
-
-    for i in movie_list:
-        title = data.iloc[i[0]].title
-        recommended_movies.append(title)
-        recommended_posters.append(fetch_poster(title))
-
-    return recommended_movies, recommended_posters"
+def fetch_poster(movie_name):
+    url = f"http://www.omdbapi.com/?t={movie_name}&apikey=YOUR_API_KEY"
     data_api = requests.get(url).json()
-    return "https://image.tmdb.org/t/p/w500/" + data_api['poster_path']
+
+    if data_api.get('Poster') != "N/A":
+        return data_api['Poster']
+    else:
+        return "https://via.placeholder.com/300x450?text=No+Image"
 
 # ---------------------------
 # RECOMMEND FUNCTION
@@ -78,9 +60,8 @@ def recommend(movie):
         recommended_posters.append(fetch_poster(title))
 
     return recommended_movies, recommended_posters
-
 # ---------------------------
-# UI DESIGN (PREMIUM)
+# UI DESIGN
 # ---------------------------
 st.markdown("""
 <style>
