@@ -4,35 +4,8 @@ import streamlit as st
 import os
 import requests
 
-
-st.markdown("""
-<style>
-.stApp {
-    background-color: #0E1117;
-    color: white;
-}
-.title {
-    text-align: center;
-    font-size: 50px;
-    font-weight: bold;
-    color: #E50914;
-}
-.subtext {
-    text-align: center;
-    font-size: 18px;
-    color: #bbbbbb;
-}
-.movie-card {
-    background-color: #1c1c1c;
-    padding: 10px;
-    border-radius: 10px;
-    text-align: center;
-}
-</style>
-""", unsafe_allow_html=True)
-
 # ---------------------------
-# Download files
+# DOWNLOAD FILES (UNCHANGED)
 # ---------------------------
 def download_file(url, filename):
     if not os.path.exists(filename):
@@ -48,7 +21,7 @@ download_file(MOVIE_DICT_URL, "movie_dict.pkl")
 download_file(SIMILARITY_URL, "similarity.pkl")
 
 # ---------------------------
-# Load data
+# LOAD DATA
 # ---------------------------
 data = pickle.load(open("movie_dict.pkl", "rb"))
 data = pd.DataFrame(data)
@@ -56,10 +29,14 @@ data = pd.DataFrame(data)
 similarity = pickle.load(open("similarity.pkl", "rb"))
 
 # ---------------------------
-# Recommendation function
+# TMDB API (ADD YOUR KEY)
 # ---------------------------
-def recommend(movie):
+API_KEY = "YOUR_API_KEY_HERE"
+
+def fetch_poster(movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?def recommend(movie):
     recommended_movies = []
+    recommended_posters = []
 
     movie_index = data[data['title'] == movie].index[0]
     distance = similarity[movie_index]
@@ -71,44 +48,102 @@ def recommend(movie):
     )[1:6]
 
     for i in movie_list:
-        recommended_movies.append(data.iloc[i[0]].title)
+        title = data.iloc[i[0]].title
+        recommended_movies.append(title)
+        recommended_posters.append(fetch_poster(title))
 
-    return recommended_movies
-
+    return recommended_movies, recommended_posters"
+    data_api = requests.get(url).json()
+    return "https://image.tmdb.org/t/p/w500/" + data_api['poster_path']
 
 # ---------------------------
-# Streamlit UI (UPDATED)
+# RECOMMEND FUNCTION
 # ---------------------------
+def recommend(movie):
+    recommended_movies = []
+    recommended_posters = []
 
-# Title Section
+    movie_index = data[data['title'] == movie].index[0]
+    distance = similarity[movie_index]
+
+    movie_list = sorted(
+        list(enumerate(distance)),
+        reverse=True,
+        key=lambda x: x[1]
+    )[1:6]
+
+    for i in movie_list:
+        title = data.iloc[i[0]].title
+        recommended_movies.append(title)
+        recommended_posters.append(fetch_poster(title))
+
+    return recommended_movies, recommended_posters
+
+# ---------------------------
+# UI DESIGN (PREMIUM)
+# ---------------------------
+st.markdown("""
+<style>
+.stApp {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+}
+
+/* Title */
+.title {
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Subtitle */
+.subtitle {
+    text-align: center;
+    font-size: 18px;
+    color: #dcdcdc;
+}
+
+/* Card */
+.movie-card {
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 15px;
+    text-align: center;
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ---------------------------
+# HEADER
+# ---------------------------
 st.markdown('<p class="title">🎬 Movie Recommender</p>', unsafe_allow_html=True)
-st.markdown('<p class="subtext">Discover movies similar to your favorites</p>', unsafe_allow_html=True)
+st.markdown('<p class="subtitle">Discover movies you’ll love 🍿</p>', unsafe_allow_html=True)
 
-# Spacer
 st.write("")
 
-# Movie Selection
+# ---------------------------
+# INPUT
+# ---------------------------
 selected_movie = st.selectbox(
     "🎥 Choose a movie",
     data['title'].values
 )
 
-# Button
-if st.button("🚀 Recommend"):
-    
+# ---------------------------
+# BUTTON
+# ---------------------------
+if st.button("🚀 Get Recommendations"):
+
     with st.spinner("Finding best movies for you... 🍿"):
-        list_of_movies = recommend(selected_movie)
+        movies, posters = recommend(selected_movie)
 
     st.write("")
     st.subheader("✨ Recommended Movies")
 
-    # Display in Grid (NEW)
     cols = st.columns(5)
 
-    for i in range(len(list_of_movies)):
+    for i in range(5):
         with cols[i]:
-            st.markdown(f"""
-            <div class="movie-card">
-                <h4>{list_of_movies[i]}</h4>
-            </div>
-            """, unsafe_allow_html=True)
+            st.image(posters[i])
+            st.markdown(f"<p style='text-align:center'>{movies[i]}</p>", unsafe_allow_html=True)
