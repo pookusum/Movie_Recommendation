@@ -68,7 +68,7 @@ st.markdown("""
 .subtitle {
     text-align: center;
     font-size: 18px;
-    color: #dcdcdc;
+    color: white;;
 }
 
 /* Card */
@@ -111,13 +111,17 @@ if st.button("🚀 Get Recommendations"):
     st.write("")
     st.subheader("✨ Recommended Movies")
 
-    # GRID LAYOUT
-    cols = st.columns(5)
-
-    for i in range(len(movies)):
-        with cols[i]:
-            st.markdown(f"""
-            <div class="movie-card">
-                {movies[i]}
-            </div>
-            """, unsafe_allow_html=True)
+    for movie in movies:
+    st.markdown(f"""
+    <div style="
+        background: rgba(255,255,255,0.15);
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: white;
+        font-weight: 500;
+    ">
+        🎬 {movie}
+    </div>
+    """, unsafe_allow_html=True)
