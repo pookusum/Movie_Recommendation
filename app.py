@@ -4,9 +4,7 @@ import streamlit as st
 import os
 import requests
 
-# ---------------------------
-# DOWNLOAD FILES 
-# ---------------------------
+
 def download_file(url, filename):
     if not os.path.exists(filename):
         with requests.get(url, stream=True) as r:
@@ -28,28 +26,11 @@ data = pd.DataFrame(data)
 
 similarity = pickle.load(open("similarity.pkl", "rb"))
 
-
-def fetch_poster(movie_name):
-    try:
-        url = f"http://www.omdbapi.com/?t={movie_name}&apikey=http://www.omdbapi.com/?i=tt3896198&apikey=a5784b03"
-        data_api = requests.get(url, timeout=5).json()
-
-        if data_api.get('Response') == 'True':
-            poster = data_api.get('Poster')
-            if poster and poster != "N/A":
-                return poster
-
-        return "https://via.placeholder.com/300x450?text=No+Image"
-
-    except:
-        return "https://via.placeholder.com/300x450?text=Error"
-
 # ---------------------------
 # RECOMMEND FUNCTION
 # ---------------------------
 def recommend(movie):
     recommended_movies = []
-    recommended_posters = []
 
     movie_index = data[data['title'] == movie].index[0]
     distance = similarity[movie_index]
@@ -61,13 +42,13 @@ def recommend(movie):
     )[1:6]
 
     for i in movie_list:
-        title = data.iloc[i[0]].title
-        recommended_movies.append(title)
-        recommended_posters.append(fetch_poster(title))
+        recommended_movies.append(data.iloc[i[0]].title)
 
-    return recommended_movies, recommended_posters
+    return recommended_movies
+
+
 # ---------------------------
-# UI DESIGN
+# UI DESIGN 
 # ---------------------------
 st.markdown("""
 <style>
@@ -94,9 +75,11 @@ st.markdown("""
 .movie-card {
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(10px);
-    padding: 10px;
+    padding: 20px;
     border-radius: 15px;
     text-align: center;
+    font-size: 16px;
+    font-weight: 500;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -123,14 +106,18 @@ selected_movie = st.selectbox(
 if st.button("🚀 Get Recommendations"):
 
     with st.spinner("Finding best movies for you... 🍿"):
-        movies, posters = recommend(selected_movie)
+        movies = recommend(selected_movie)
 
     st.write("")
     st.subheader("✨ Recommended Movies")
 
+    # GRID LAYOUT
     cols = st.columns(5)
 
-    for i in range(5):
+    for i in range(len(movies)):
         with cols[i]:
-            st.image(posters[i])
-            st.markdown(f"<p style='text-align:center'>{movies[i]}</p>", unsafe_allow_html=True)
+            st.markdown(f"""
+            <div class="movie-card">
+                {movies[i]}
+            </div>
+            """, unsafe_allow_html=True)
