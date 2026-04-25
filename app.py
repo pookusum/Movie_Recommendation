@@ -58,7 +58,7 @@ st.markdown("""
 /* Title */
 .title {
     text-align: center;
-    font-size: 60px;
+    font-size: 80px;
     font-weight: bold;
     color: white;
 }
