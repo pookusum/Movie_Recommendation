@@ -4,7 +4,9 @@ import streamlit as st
 import os
 import requests
 
-
+# ---------------------------
+# DOWNLOAD FILES
+# ---------------------------
 def download_file(url, filename):
     if not os.path.exists(filename):
         with requests.get(url, stream=True) as r:
@@ -46,9 +48,8 @@ def recommend(movie):
 
     return recommended_movies
 
-
 # ---------------------------
-# UI DESIGN 
+# UI DESIGN
 # ---------------------------
 st.markdown("""
 <style>
@@ -68,17 +69,17 @@ st.markdown("""
 .subtitle {
     text-align: center;
     font-size: 18px;
-    color: white;;
+    color: white;
 }
 
-/* Card */
-.movie-card {
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(10px);
-    padding: 20px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 16px;
+/* Movie List Item */
+.movie-item {
+    background: rgba(255,255,255,0.15);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: white;
     font-weight: 500;
 }
 </style>
@@ -111,17 +112,10 @@ if st.button("🚀 Get Recommendations"):
     st.write("")
     st.subheader("✨ Recommended Movies")
 
+    # ✅ CORRECT INDENTATION HERE
     for movie in movies:
-    st.markdown(f"""
-    <div style="
-        background: rgba(255,255,255,0.15);
-        padding: 12px;
-        border-radius: 10px;
-        margin-bottom: 10px;
-        font-size: 18px;
-        color: white;
-        font-weight: 500;
-    ">
-        🎬 {movie}
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown(f"""
+        <div class="movie-item">
+            🎬 {movie}
+        </div>
+        """, unsafe_allow_html=True)
