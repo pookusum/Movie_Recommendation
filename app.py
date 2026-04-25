@@ -34,7 +34,7 @@ similarity = pickle.load(open("similarity.pkl", "rb"))
 API_KEY = "YOUR_API_KEY_HERE"
 
 def fetch_poster(movie_id):
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}?def recommend(movie):
+    url = "http://www.omdbapi.com/?i=tt3896198&apikey=a5784b03?def recommend(movie):
     recommended_movies = []
     recommended_posters = []
 
