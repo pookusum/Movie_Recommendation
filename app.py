@@ -30,13 +30,19 @@ similarity = pickle.load(open("similarity.pkl", "rb"))
 
 
 def fetch_poster(movie_name):
-    url = f"http://www.omdbapi.com/?t={movie_name}&apikey=YOUR_API_KEY"
-    data_api = requests.get(url).json()
+    try:
+        url = f"http://www.omdbapi.com/?t={movie_name}&apikey=http://www.omdbapi.com/?i=tt3896198&apikey=a5784b03"
+        data_api = requests.get(url, timeout=5).json()
 
-    if data_api.get('Poster') != "N/A":
-        return data_api['Poster']
-    else:
+        if data_api.get('Response') == 'True':
+            poster = data_api.get('Poster')
+            if poster and poster != "N/A":
+                return poster
+
         return "https://via.placeholder.com/300x450?text=No+Image"
+
+    except:
+        return "https://via.placeholder.com/300x450?text=Error"
 
 # ---------------------------
 # RECOMMEND FUNCTION
