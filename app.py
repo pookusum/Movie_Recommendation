@@ -48,9 +48,7 @@ def recommend(movie):
 
     return recommended_movies
 
-# ---------------------------
-# UI DESIGN
-# ---------------------------
+# UI
 st.markdown("""
 <style>
 .stApp {
@@ -60,7 +58,7 @@ st.markdown("""
 /* Title */
 .title {
     text-align: center;
-    font-size: 48px;
+    font-size: 60px;
     font-weight: bold;
     color: white;
 }
@@ -110,7 +108,7 @@ if st.button("🚀 Get Recommendations"):
         movies = recommend(selected_movie)
 
     st.write("")
-    st.subheader("✨ Recommended Movies")
+    st.subheader("Recommended Movies")
 
     # ✅ CORRECT INDENTATION HERE
     for movie in movies:
